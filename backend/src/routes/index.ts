@@ -3,6 +3,7 @@ import healthRoutes from '../modules/health/health.routes';
 import authRoutes from '../modules/auth/auth.routes';
 import driverRoutes from '../modules/drivers/driver.routes';
 import rideRoutes from '../modules/rides/ride.routes';
+import communicationRoutes from '../modules/communication/communication.routes';
 
 const router = Router();
 
@@ -13,5 +14,6 @@ router.use('/', healthRoutes);
 router.use('/auth', authRoutes);
 router.use('/drivers', driverRoutes);
 router.use('/rides', rideRoutes);
+router.use('/communication', communicationRoutes);
 
 export default router;
