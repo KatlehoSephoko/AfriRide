@@ -336,3 +336,81 @@ model AIMessage {
   @@index([conversationId])
   @@map("ai_messages")
 }
+
+enum PanicTrigger {
+  BUTTON
+  SHAKE
+  HARDWARE
+}
+
+enum SafetyEventType {
+  RIDE_STARTED
+  DRIVER_ARRIVED
+  ROUTE_DEVIATION
+  UNEXPECTED_STOP
+  PANIC_TRIGGERED
+  RIDE_COMPLETED
+}
+
+model TrustedContact {
+  id           String   @id @default(uuid())
+  userId       String
+  name         String
+  phone        String
+  shareTrips   Boolean  @default(true)
+  notifyOnSOS  Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("trusted_contacts")
+}
+
+model SafetyEvent {
+  id          String          @id @default(uuid())
+  rideId      String?
+  userId      String
+  type        SafetyEventType
+  latitude    Float?
+  longitude   Float?
+  metadata    Json?
+  createdAt   DateTime        @default(now())
+
+  ride        Ride?           @relation(fields: [rideId], references: [id], onDelete: SetNull)
+
+  @@index([rideId])
+  @@index([userId])
+  @@map("safety_events")
+}
+
+model PanicAlert {
+  id              String       @id @default(uuid())
+  userId          String
+  rideId          String?
+  trigger         PanicTrigger
+  latitude        Float
+  longitude       Float
+  status          String       @default("ACTIVE") // ACTIVE, RESOLVED, FALSE_ALARM
+  resolvedAt      DateTime?
+  resolutionNotes String?
+  createdAt       DateTime     @default(now())
+
+  @@index([userId])
+  @@index([status])
+  @@map("panic_alerts")
+}
+
+model RideVerification {
+  id             String   @id @default(uuid())
+  rideId         String   @unique
+  requesterId    String
+  passengerPhone String
+  tokenHash      String   // Cryptographically secure hash of the 6-digit or URL token
+  expiresAt      DateTime
+  isVerified     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  @@index([rideId])
+  @@map("ride_verifications")
+}
