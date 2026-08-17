@@ -1,0 +1,23 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [postgis]
+}
+
+// A preliminary model to ensure Prisma can generate the client in Phase A.
+// Full schema will be introduced in subsequent phases.
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String
+  entityId  String?
+  entity    String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@map("audit_logs")
+}
