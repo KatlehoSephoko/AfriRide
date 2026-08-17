@@ -7,6 +7,7 @@ import { logger } from './config/logger.config';
 import { globalErrorHandler } from './common/middleware/error.middleware';
 import { errorResponse } from './common/utils/api-response';
 import rootRouter from './routes';
+import { globalRateLimiter } from './common/middleware/rate-limiter.middleware';
 
 const app: Application = express();
 
@@ -17,6 +18,8 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+app.use(globalRateLimiter);
 
 // Payload parsing
 app.use(express.json({ limit: '1mb' }));
