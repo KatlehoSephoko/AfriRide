@@ -4,6 +4,8 @@ import authRoutes from '../modules/auth/auth.routes';
 import driverRoutes from '../modules/drivers/driver.routes';
 import rideRoutes from '../modules/rides/ride.routes';
 import communicationRoutes from '../modules/communication/communication.routes';
+import tripsRoutes from '../modules/trips/trips.routes';
+import safetyRoutes from '../modules/safety/safety.routes';
 
 const router = Router();
 
@@ -15,5 +17,7 @@ router.use('/auth', authRoutes);
 router.use('/drivers', driverRoutes);
 router.use('/rides', rideRoutes);
 router.use('/communication', communicationRoutes);
+router.use('/trips', tripsRoutes);
+router.use('/safety', safetyRoutes);
 
 export default router;
