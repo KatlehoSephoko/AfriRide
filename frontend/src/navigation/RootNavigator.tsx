@@ -4,13 +4,24 @@ import { View, ActivityIndicator } from 'react-native';
 import { AuthNavigator } from './AuthNavigator';
 import { AppNavigator } from './AppNavigator';
 import { useAuthStore } from '../store/useAuthStore';
+import { useRideStore } from '../store/useRideStore';
 
 export const RootNavigator = () => {
   const { isAuthenticated, isLoading, hydrate } = useAuthStore();
+  const { connectSocket, disconnectSocket } = useRideStore();
 
   useEffect(() => {
     hydrate();
   }, [hydrate]);
+
+  // Connect sockets when authenticated, clean up on logout
+  useEffect(() => {
+    if (isAuthenticated) {
+      connectSocket();
+    } else {
+      disconnectSocket();
+    }
+  }, [isAuthenticated, connectSocket, disconnectSocket]);
 
   if (isLoading) {
     return (
