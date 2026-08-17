@@ -1,14 +1,13 @@
 import { Router } from 'express';
 import healthRoutes from '../modules/health/health.routes';
+import authRoutes from '../modules/auth/auth.routes';
 
 const router = Router();
 
 // Infrastructure Routes
-router.use('/', healthRoutes); // Binds to /api/v1/health and /api/v1/ready via app.ts
+router.use('/', healthRoutes); 
 
-// V1 Modules (To be added in subsequent phases)
-// router.use('/auth', authRoutes);
-// router.use('/users', userRoutes);
-// router.use('/rides', rideRoutes);
+// V1 Modules
+router.use('/auth', authRoutes);
 
 export default router;
