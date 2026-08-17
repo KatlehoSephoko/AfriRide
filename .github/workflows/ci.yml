@@ -1,0 +1,46 @@
+name: AfriRide Backend CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Generate Prisma Client
+      run: npx prisma generate
+
+    - name: Lint Code
+      run: npm run lint
+
+    - name: Run Unit & Integration Tests
+      env:
+        NODE_ENV: test
+        JWT_SECRET: test_secret_key_123
+        JWT_REFRESH_SECRET: test_refresh_key_123
+      run: npm test
+
+    - name: Build TypeScript
+      run: npm run build
