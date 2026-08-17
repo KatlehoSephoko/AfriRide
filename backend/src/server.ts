@@ -4,6 +4,7 @@ import { logger } from './config/logger.config';
 import { prisma } from './config/database.config';
 import { redis } from './config/redis.config';
 import { Server } from 'http';
+import { setupSocket } from './websocket/socket';
 
 let server: Server;
 
@@ -17,6 +18,8 @@ const startServer = async () => {
     server = app.listen(env.PORT, () => {
       logger.info(`🚀 AfriRide API running in ${env.NODE_ENV} mode on port ${env.PORT}`);
     });
+
+    setupSocket(server);
 
   } catch (error) {
     logger.error({ err: error }, '🔴 Failed to start server');
