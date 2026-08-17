@@ -228,3 +228,67 @@ model DriverLocation {
 
   @@map("driver_locations")
 }
+
+enum RideStatus {
+  REQUESTED
+  TOKEN_SENT
+  VERIFIED
+  DRIVER_ASSIGNED
+  DRIVER_EN_ROUTE
+  ARRIVED
+  IN_TRIP
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CARD
+  CASH
+  WALLET
+  CORPORATE
+}
+
+model Ride {
+  id                     String        @id @default(uuid())
+  passengerId            String
+  driverId               String?
+  vehicleId              String?
+  
+  status                 RideStatus    @default(REQUESTED)
+  paymentMethod          PaymentMethod @default(CASH)
+  
+  // Locations (stored as JSON for historical context, active queries use PostGIS)
+  pickupLat              Float
+  pickupLng              Float
+  pickupAddress          String
+  destinationLat         Float
+  destinationLng         Float
+  destinationAddress     String
+  
+  // Accessibility & Empathy Rules
+  requiresAccessibleTier Boolean       @default(false)
+  gracePeriodMinutes     Int           @default(3) // Empathy rule: 12 if accessible, else 3
+  
+  // Financials
+  estimatedFare          Decimal       @db.Decimal(10, 2)
+  finalFare              Decimal?      @db.Decimal(10, 2)
+  
+  // Timestamps
+  requestedAt            DateTime      @default(now())
+  acceptedAt             DateTime?
+  arrivedAt              DateTime?
+  startedAt              DateTime?
+  completedAt            DateTime?
+  cancelledAt            DateTime?
+  cancelledBy            String?       // ID of user or "SYSTEM"
+  cancellationReason     String?
+
+  passenger              User          @relation(fields: [passengerId], references: [id])
+  driver                 DriverProfile? @relation(fields: [driverId], references: [id])
+  vehicle                Vehicle?      @relation(fields: [vehicleId], references: [id])
+
+  @@index([passengerId])
+  @@index([driverId])
+  @@index([status])
+  @@map("rides")
+}
