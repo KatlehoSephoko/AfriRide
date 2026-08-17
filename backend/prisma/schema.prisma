@@ -9,8 +9,114 @@ datasource db {
   extensions = [postgis]
 }
 
-// A preliminary model to ensure Prisma can generate the client in Phase A.
-// Full schema will be introduced in subsequent phases.
+enum Role {
+  PASSENGER
+  DRIVER
+  ADMIN
+  SUPPORT
+  FLEET_MANAGER
+  CORPORATE_ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DEACTIVATED
+  PENDING
+}
+
+enum DisabilityType {
+  NONE
+  VISUAL
+  HEARING
+  MOBILITY
+  COGNITIVE
+  MULTIPLE
+}
+
+model User {
+  id            String    @id @default(uuid())
+  phone         String    @unique
+  email         String?   @unique
+  passwordHash  String
+  role          Role      @default(PASSENGER)
+  status        UserStatus @default(ACTIVE)
+  isVerified    Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  passengerProfile PassengerProfile?
+  deviceSessions   DeviceSession[]
+  userConsents     UserConsent[]
+
+  @@map("users")
+}
+
+model PassengerProfile {
+  id                   String         @id @default(uuid())
+  userId               String         @unique
+  firstName            String
+  lastName             String
+  photoUrl             String?
+  
+  // Accessibility Requirements
+  requiresAccessibleTier Boolean      @default(false)
+  disabilityType       DisabilityType @default(NONE)
+  prefersTextOnly      Boolean        @default(false)
+  prefersVoice         Boolean        @default(false)
+  requiresScreenReader Boolean        @default(false)
+  requiresTextToSpeech Boolean        @default(false)
+  requiresBraille      Boolean        @default(false)
+  textScale            Float          @default(1.0)
+  highContrast         Boolean        @default(false)
+  darkMode             Boolean        @default(false)
+  preferredLanguage    String         @default("en")
+  
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  user                 User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("passenger_profiles")
+}
+
+model DeviceSession {
+  id           String   @id @default(uuid())
+  userId       String
+  refreshToken String   @unique
+  deviceToken  String?  // For push notifications
+  deviceName   String?
+  ipAddress    String?
+  userAgent    String?
+  isValid      Boolean  @default(true)
+  lastActive   DateTime @default(now())
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([refreshToken])
+  @@map("device_sessions")
+}
+
+model UserConsent {
+  id                    String   @id @default(uuid())
+  userId                String
+  termsAccepted         Boolean
+  termsVersion          String
+  privacyPolicyAccepted Boolean
+  privacyPolicyVersion  String
+  popiaConsent          Boolean  // Explicit POPIA data processing consent
+  marketingConsent      Boolean  @default(false)
+  ipAddress             String?
+  createdAt             DateTime @default(now())
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("user_consents")
+}
+
 model AuditLog {
   id        String   @id @default(uuid())
   action    String
