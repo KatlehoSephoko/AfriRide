@@ -10,6 +10,7 @@ import { useRideStore } from '../store/useRideStore';
 import { PassengerHomeScreen } from '../screens/passenger/PassengerHomeScreen';
 import { PassengerTrackingScreen } from '../screens/passenger/PassengerTrackingScreen';
 import { PassengerWalletScreen } from '../screens/passenger/PassengerWalletScreen';
+import { DriverOnboardingScreen } from '../screens/passenger/DriverOnboardingScreen';
 
 //Safety Center
 import { SafetyCenterScreen } from '../screens/passenger/SafetyCenterScreen';
@@ -20,6 +21,7 @@ import { VerifyGuestScreen } from '../screens/passenger/VerifyGuestScreen';
 import { DriverHomeScreen } from '../screens/driver/DriverHomeScreen';
 import { DriverActiveTripScreen } from '../screens/driver/DriverActiveTripScreen';
 import { DriverEarningsScreen } from '../screens/driver/DriverEarningsScreen';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -76,21 +78,26 @@ export const AppNavigator = () => {
   const activeRide = useRideStore((state) => state.activeRide);
 
 
-  return (
+  
+return (
   <AppStack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
     {activeRide ? (
       <AppStack.Screen name="PassengerTracking" component={PassengerTrackingScreen} />
     ) : (
       <>
         <AppStack.Screen name="PassengerHome" component={PassengerHomeScreen} />
-        {/* New Routes */}
+        {/* Existing Routes */}
         <AppStack.Screen name="SafetyCenter" component={SafetyCenterScreen} />
         <AppStack.Screen name="RequestForFriend" component={RequestForFriendScreen} />
         <AppStack.Screen name="VerifyGuest" component={VerifyGuestScreen} />
+        
+        {/* New Onboarding Route */}
+        <AppStack.Screen name="DriverOnboarding" component={DriverOnboardingScreen} />
       </>
     )}
   </AppStack.Navigator>
 );
+
   
   return (
     <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
