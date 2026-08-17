@@ -6,6 +6,7 @@ import rideRoutes from '../modules/rides/ride.routes';
 import communicationRoutes from '../modules/communication/communication.routes';
 import tripsRoutes from '../modules/trips/trips.routes';
 import safetyRoutes from '../modules/safety/safety.routes';
+import financeRoutes from '../modules/finance/finance.routes'; // <-- Import
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.use('/rides', rideRoutes);
 router.use('/communication', communicationRoutes);
 router.use('/trips', tripsRoutes);
 router.use('/safety', safetyRoutes);
+router.use('/finance', financeRoutes); // <-- Mount
 
 export default router;
