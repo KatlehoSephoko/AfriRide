@@ -1,21 +1,22 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Text } from 'react-native';
-
-// Temporary placeholder screens for Phase A
-const LoginScreen = () => (
-  <View className="flex-1 bg-brand-cream items-center justify-center">
-    <Text className="text-brand-green font-bold text-2xl">AfriRide</Text>
-    <Text className="text-brand-neutral mt-2">Login Screen Placeholder</Text>
-  </View>
-);
+import { LoginScreen } from '../screens/auth/LoginScreen';
+import { RegisterScreen } from '../screens/auth/RegisterScreen';
+import { AccessibilityOnboardingScreen } from '../screens/auth/AccessibilityOnboardingScreen';
 
 const AuthStack = createNativeStackNavigator();
 
 export const AuthNavigator = () => {
   return (
-    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+    <AuthStack.Navigator 
+      screenOptions={{ 
+        headerShown: false,
+        animation: 'slide_from_right'
+      }}
+    >
       <AuthStack.Screen name="Login" component={LoginScreen} />
+      <AuthStack.Screen name="Register" component={RegisterScreen} />
+      <AuthStack.Screen name="AccessibilityOnboarding" component={AccessibilityOnboardingScreen} />
     </AuthStack.Navigator>
   );
 };
