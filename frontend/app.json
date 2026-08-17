@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "AfriRide",
+    "slug": "afriride",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.afriride.app",
+      "infoPlist": {
+        "UIBackgroundModes": ["location", "audio"],
+        "NSLocationWhenInUseUsageDescription": "AfriRide needs your location to match you with nearby drivers.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "AfriRide tracks your location for safety during active rides."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.afriride.app",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "RECORD_AUDIO"
+      ]
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-speech"
+    ],
+    "extra": {
+      "apiUrl": process.env.EXPO_PUBLIC_API_URL || "http://localhost:8000/api/v1"
+    }
+  }
+}
