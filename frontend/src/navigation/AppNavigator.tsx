@@ -11,6 +11,11 @@ import { PassengerHomeScreen } from '../screens/passenger/PassengerHomeScreen';
 import { PassengerTrackingScreen } from '../screens/passenger/PassengerTrackingScreen';
 import { PassengerWalletScreen } from '../screens/passenger/PassengerWalletScreen';
 
+//Safety Center
+import { SafetyCenterScreen } from '../screens/passenger/SafetyCenterScreen';
+import { RequestForFriendScreen } from '../screens/passenger/RequestForFriendScreen';
+import { VerifyGuestScreen } from '../screens/passenger/VerifyGuestScreen';
+
 // Driver Screens
 import { DriverHomeScreen } from '../screens/driver/DriverHomeScreen';
 import { DriverActiveTripScreen } from '../screens/driver/DriverActiveTripScreen';
@@ -70,6 +75,23 @@ export const AppNavigator = () => {
   const role = useAuthStore((state) => state.user?.role);
   const activeRide = useRideStore((state) => state.activeRide);
 
+
+  return (
+  <AppStack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
+    {activeRide ? (
+      <AppStack.Screen name="PassengerTracking" component={PassengerTrackingScreen} />
+    ) : (
+      <>
+        <AppStack.Screen name="PassengerHome" component={PassengerHomeScreen} />
+        {/* New Routes */}
+        <AppStack.Screen name="SafetyCenter" component={SafetyCenterScreen} />
+        <AppStack.Screen name="RequestForFriend" component={RequestForFriendScreen} />
+        <AppStack.Screen name="VerifyGuest" component={VerifyGuestScreen} />
+      </>
+    )}
+  </AppStack.Navigator>
+);
+  
   return (
     <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
       {/* If a ride is currently active, force the user into the tracking/trip view */}
