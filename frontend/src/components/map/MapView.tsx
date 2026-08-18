@@ -30,7 +30,6 @@ export const AppMap: React.FC<AppMapProps> = ({ userLocation, drivers = [] }) =>
           <Marker
             key={driver.id}
             coordinate={{ latitude: driver.latitude, longitude: driver.longitude }}
-            image={require('../../../assets/icon.png')} // Replace with a tiny car icon later
           />
         ))}
       </MapView>

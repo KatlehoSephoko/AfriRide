@@ -34,11 +34,10 @@
       ]
     },
     "plugins": [
-      "expo-secure-store",
-      "expo-speech"
+      "expo-secure-store"
     ],
     "extra": {
-      "apiUrl": process.env.EXPO_PUBLIC_API_URL || "http://localhost:8000/api/v1"
+      "apiUrl": "http://localhost:8000/api/v1"
     }
   }
 }
